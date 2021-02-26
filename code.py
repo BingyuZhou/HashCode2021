@@ -51,7 +51,7 @@ def solve(sim_time, bonus, street_list, car_list):
     result = {}
     for s in schedule:
         interaction = Intersection(s[1])
-        interaction.TL[s[2]] = [s[0], sim_time]
+        interaction.TL[s[2]] = [s[0], s[0] + 1]
         result[s[1]] = interaction
 
     for car in cars[1:]:
@@ -67,16 +67,15 @@ def solve(sim_time, bonus, street_list, car_list):
                     old_time = intersection.TL[street_id]
                     new_time = [
                         min(timestamp, old_time[0]),
-                        max(timestamp, old_time[1]),
+                        max(timestamp + 1, old_time[1]),
                     ]
 
-                    if not intersection.isConflict(
-                        new_time[0]
-                    ) and not intersection.isConflict(new_time[1]):
+                    if not intersection.isConflict(new_time):
                         intersection.TL[street_id] = new_time
                 else:
-                    if not intersection.isConflict(timestamp):
-                        intersection.TL[street_id] = [timestamp, timestamp + 1]
+                    new_time = [timestamp, timestamp + 1]
+                    if not intersection.isConflict(new_time):
+                        intersection.TL[street_id] = new_time
             else:
                 intersection = Intersection(intersection_id)
                 intersection.TL[street_id] = [timestamp, timestamp + 1]

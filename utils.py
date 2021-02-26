@@ -57,9 +57,11 @@ class Intersection:
             output += "\n"
         return output
 
-    def isConflict(self, time_stamp):
+    def isConflict(self, time_range: List[int]):
         for _, time in self.TL.items():
-            if time_stamp >= time[0] and time_stamp <= time[1]:
+            if time_range[0] >= time[0] and time_range[0] < time[1]:
+                return True
+            if time[0] >= time_range[0] and time[0] < time_range[1]:
                 return True
         return False
 
